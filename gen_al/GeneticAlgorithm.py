@@ -32,7 +32,7 @@ def evaluation(table, next, fitness):
         fitness = 0
     print("FITNESS",parents)
 
-def crossover(table,i):
+def crossover(table,i,next,fitness):
     print("\n\n===CROSSOVER===")
     while i < len(table):
         print("-> selected parents:",table[i].chairs,table[i+1].chairs)
@@ -41,5 +41,27 @@ def crossover(table,i):
         print("= produced offspring",offSpring1,offSpring2)
         i+=2
 
-def mutation(guest, table):
-    print("Coming...")
+    for t in range(0, len(table)):
+        for i in range(0, len(table[t].chairs)-1):
+            for j in range(next, len(table[t].chairs)):
+                #print(table[0].chairs[:int(len(table[0].chairs)/2)+1]+table[1].chairs[int(len(table[1].chairs)/2)+1:])
+                #print(table[0].chairs[int(len(table[0].chairs)/2)+1:]+table[1].chairs[:int(len(table[1].chairs)/2)+1])
+                #DI KO SURE DIRI
+                fitness += int(GuestPair.getPoints(table[0].chairs[i],table[1].chairs[j]))
+            next+=1
+        next = 1
+        offsprings.append(fitness)
+        fitness = 0
+    print("FITNESS",offsprings)
+
+    mutation(offSpring1) #si offspring1 pa lang ako ge test
+    
+def mutation(offSpring1):
+    #exchange mutation : choosing two genes at random and swap them
+    print("\n\n===MUTATION===")
+    x = random.randint(0,len(offSpring1)-1)
+    y = random.randint(0,len(offSpring1)-1)
+    offSpring1[x],offSpring1[y] = offSpring1[y] , offSpring1[x]
+    print(offSpring1)
+            
+   

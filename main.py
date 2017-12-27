@@ -10,7 +10,7 @@ guest = []
 table = []
 
 #reads csv, eliminate duplicates
-with open('relational_keys.csv')  as csvfile:
+with open('relational_keys.csv') as csvfile:
     readCSV = csv.reader(csvfile, delimiter=',')
     lastR = ""
     tempG = []
@@ -34,6 +34,5 @@ table.append(Table("2"))
 
 #GENETIC ALGORITHM GOES HERE
 GeneticAlgorithm.initialization(guest,table)
-GeneticAlgorithm.evaluation(table,1,0)
-GeneticAlgorithm.crossover(table,0,1,0)
-#GeneticAlgorithm.mutation(guest,table)
+GeneticAlgorithm.evaluation(table,1,"")
+GeneticAlgorithm.crossover(table,0)

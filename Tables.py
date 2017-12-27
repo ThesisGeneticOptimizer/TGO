@@ -1,5 +1,6 @@
 class Table:
     tables = []
+
     def __init__(self, tblnumber):
         self.tblnumber = tblnumber
         self.chairs = []
@@ -10,6 +11,9 @@ class Table:
 
     def displayTable(self):
         return self.chairs
+
+    def setOffSpring(self, offspring):
+        self.chairs = offspring
 
     def displayNumber(self):
         return self.tblnumber

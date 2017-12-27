@@ -1,5 +1,3 @@
-
-
 from Guests import Guest
 from Tables import Table
 from gen_al import GeneticAlgorithm

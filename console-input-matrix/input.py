@@ -1,10 +1,37 @@
 def ask_input():
-    hm_table = input("How many table?")
-    hm_guest_table = input("How many guest per table?")
+##    hm_table = input("How many table?")
+##    hm_guest_table = input("How many guest per table?")
+##
+##    total_guest = int(hm_table)*int(hm_guest_table)
+##    print ('Total guest :' ,total_guest)
+##    ask_for_guest(total_guest)
 
-    total_guest = int(hm_table)*int(hm_guest_table)
-    print ('Total guest :' ,total_guest)
-    ask_for_guest(total_guest)
+    hm_guest = input("How many guests?")
+    
+    
+    print ("===SUGGESTED # of tables===")
+    array_guest_tables = [10,8,6,5,4,3]
+    stored_tables = ""
+    for i in range(len(array_guest_tables)):
+        sugtables = int(hm_guest)/int(array_guest_tables[i])
+        if sugtables % 1 == 0:
+            print(int(sugtables))
+
+    hm_table = input("Enter # of tables: ")
+
+    inp_tables = int(hm_guest) / int(hm_table)
+    if inp_tables % 1 == 0:
+        number_guest_table = int(hm_guest)/int(hm_table)
+        print("Guest per table :",int(number_guest_table))
+    else:
+        print("fail")
+        
+    ask_for_guest(int(hm_guest))
+   
+        
+                
+    
+    
     
 def ask_for_guest(hm):
     list_of_guest = []

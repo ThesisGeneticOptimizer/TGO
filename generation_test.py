@@ -10,13 +10,15 @@ print("Number of Generations :",numberOfGeneration,"\n")
 textSuggest = "Suggested Number of Table : "
 tempNumberGuest = numberGuest
 for q in range(0, len(arr)):
-    if numberGuest/tempNumberGuest == 0:
-        textSuggest = textSuggest + str(q) + " "
+    if numberGuest%tempNumberGuest == 0:       
+        textSuggest = textSuggest + str(tempNumberGuest) + " "
     tempNumberGuest = tempNumberGuest - 1
 print(textSuggest)
+numberTable = input("Enter number of Table :")
+numberOfGuest = int(int(numberGuest)/int(numberTable))
+print(numberOfGuest,"Guest per table")
 
-
-numberTable = input("Enter number of person :")
+numberTable = numberOfGuest
 count = 1
 lenghtCounter = 0
 switch = True
@@ -71,6 +73,4 @@ while count < numberOfGeneration: #Number of Generation
 num = 0
 for a in generation:
     print(a," : ",num)
-    num = num + 1
-                    
-    
+    num = num + 1        

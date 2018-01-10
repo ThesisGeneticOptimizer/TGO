@@ -1,5 +1,7 @@
 import csv
 import openpyxl
+from tkinter import filedialog
+from random import *
 
 def ask_input():
     hm_guest = input("How many guests?")
@@ -24,26 +26,45 @@ def ask_for_guest(hm):
     s_o_csv = open("Simplified.csv","w")
     sheetname = o_csv.get_sheet_by_name('Sheet1')
 
-    for i in range (hm):
-        print (i+1,"guest name :")
-        add_to_list =  input()
-        sheetname.cell(row=1,column=i+2).value = add_to_list
-        sheetname.cell(row=i+2,column=1).value = add_to_list
+    data = input("[1]Manual Input\n[2]Browse Data\n")
+
+    if int(data) == 2:
+        fname = filedialog.askopenfilename(filetypes = (("All files", "*.type"), ("All files", "*")))
+        with open(fname,"r") as file:
+            i=0
+            for line in file:
+                print(i+1,line)
+                line = line.replace("\n","")
+                sheetname.cell(row=1,column=i+2).value = line
+                sheetname.cell(row=i+2,column=1).value = line
+                i+=1
+    else:
+        for i in range (hm):
+            print (i+1,"guest name :")
+            add_to_list =  input()
+            sheetname.cell(row=1,column=i+2).value = add_to_list
+            sheetname.cell(row=i+2,column=1).value = add_to_list
 
     for i in range (1,hm+1):
         for j in range (2,hm+1):
             row = sheetname.cell(row=i+1,column=1).value
             col = sheetname.cell(row=1,column=j+1).value
             if i+1 != j+1 and sheetname.cell(row=j+1,column=i+1).value is None:
-                print ("Relationship between",row,"and",col,":")
-                rel = input()
+                #print ("Relationship between",row,"and",col,":")
+                #rel = input()
 
+                #if str(rel) == "":
+                #    rel = 0
+                rel = randint(0,4)
+                    
                 merge = int(rel)
                 s_merge = row,col,rel
 
+                
+
                 conv = str(s_merge)
 
-                b = "()' "
+                b = "()'"
                 for char in b:
                     conv = conv.replace(char,"")
                     

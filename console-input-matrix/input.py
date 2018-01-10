@@ -2,15 +2,26 @@ import csv
 import openpyxl
 
 def ask_input():
-    hm_table = input("How many table?")
-    hm_guest_table = input("How many guest per table?")
+    hm_guest = input("How many guests?")
+    print ("===SUGGESTED # of tables===")
+    for i in range(1,int(hm_guest)+1):
+        if int(hm_guest) % i == 0:
+            print(i)
 
-    total_guest = int(hm_table)*int(hm_guest_table)
-    print ('Total guest :' ,total_guest)
-    ask_for_guest(total_guest)
+    hm_table = input("Enter # of tables: ")
+
+    inp_tables = int(hm_guest) / int(hm_table)
+    if inp_tables % 1 == 0:
+        number_guest_table = int(hm_guest)/int(hm_table)
+        print("Guest per table :",int(number_guest_table))
+    else:
+        print("fail")
+        
+    ask_for_guest(int(hm_guest))
     
 def ask_for_guest(hm):
     o_csv = openpyxl.load_workbook('Matrix_Relationship_M.xlsm')
+    s_o_csv = open("Simplified.csv","w")
     sheetname = o_csv.get_sheet_by_name('Sheet1')
 
     for i in range (hm):
@@ -28,11 +39,24 @@ def ask_for_guest(hm):
                 rel = input()
 
                 merge = int(rel)
+                s_merge = row,col,rel
+
+                conv = str(s_merge)
+
+                b = "()' "
+                for char in b:
+                    conv = conv.replace(char,"")
+                    
+                s_o_csv.write(conv)
+                s_o_csv.write('\n')
+
+                
 
                 sheetname.cell(row=i+1,column=j+1).value = merge
                 sheetname.cell(row=j+1,column=i+1).value = merge
-               
+                
     o_csv.save('Matrix_Relationship_SX.xlsx')
+    s_o_csv.close()
     xlsx_csv()
 
 def xlsx_csv():

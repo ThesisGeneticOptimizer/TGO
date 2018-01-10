@@ -10,7 +10,7 @@ def ask_input():
     ask_for_guest(total_guest)
     
 def ask_for_guest(hm):
-    o_csv = openpyxl.load_workbook('Relationship.xlsx',read_only=False, keep_vba= True)
+    o_csv = openpyxl.load_workbook('Matrix_Relationship_M.xlsm')
     sheetname = o_csv.get_sheet_by_name('Sheet1')
 
     for i in range (hm):
@@ -32,7 +32,16 @@ def ask_for_guest(hm):
                 sheetname.cell(row=i+1,column=j+1).value = merge
                 sheetname.cell(row=j+1,column=i+1).value = merge
                
-    o_csv.save('Matrix_Relationship.xlsm')
+    o_csv.save('Matrix_Relationship_SX.xlsx')
+    xlsx_csv()
 
+def xlsx_csv():
+    wb = openpyxl.load_workbook('Matrix_Relationship_SX.xlsx')
+    sh = wb.get_active_sheet()
+    with open('Matrix_Relationship_CSV.csv','w') as f:
+        c = csv.writer(f)
+        for r in sh.rows:
+            c.writerow([cell.value for cell in r])
+    print("Converting done")
        
 ask_input()

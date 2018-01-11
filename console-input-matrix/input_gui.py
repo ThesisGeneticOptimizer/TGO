@@ -4,15 +4,6 @@ import csv
 
 currentgrid = 19
 
-class Button(wx.Frame):
-    def __init__(self, parent, source):
-        wx.Frame.__init__(self, parent, -1, size=(500,500))
-        self.source = source
-        self.pos = 0 
-        self.Show()
-        
-    
-
 class Frame(wx.Frame):
     def __init__(self, parent):
         wx.Frame.__init__(self, parent, -1, "Grid", size=(700,450))

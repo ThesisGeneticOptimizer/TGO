@@ -1,67 +1,72 @@
-import tkinter
+import wx
+import wx.grid as grid
 import csv
-from tkinter import filedialog
-from tkinter import *
 
-root = tkinter.Tk()
-menubar = Menu(root)
-filemenu = Menu(menubar, tearoff = 0)
-root.geometry("1000x1000")
+currentgrid = 19
 
-Can1 = tkinter.Canvas(root, bg="Gray")
-Can1.grid(row=0, column=0)
-
-vsbar = tkinter.Scrollbar(root, orient="vertical", command=Can1.yview)
-vsbar.grid(row=0, column=1, sticky=N+S+E+W)
-Can1.configure(yscrollcommand=vsbar.set)
-
-hsbar = tkinter.Scrollbar(root, orient="horizontal", command=Can1.xview)
-hsbar.grid(row=1, column=0, sticky=N+S+E+W)
-Can1.configure(xscrollcommand=hsbar.set)
-
-frame_buttons = tkinter.Frame(Can1, bg="Gray", bd=2, relief=tkinter.GROOVE)
-Can1.create_window((0,0), window=frame_buttons,anchor='nw')
-
-def resize(event):
-    Can1.configure(scrollregion=Can1.bbox("all"), width=980, height=690)
-frame_buttons.bind("<Configure>", resize)
-
-def display_matrix(fname):
-    with open(fname,newline="") as file:
-       reader = csv.reader(file)
-
-       
-       r = 0
-       for col in reader:
-          c = 0
-          for row in col:
+class Button(wx.Frame):
+    def __init__(self, parent, source):
+        wx.Frame.__init__(self, parent, -1, size=(500,500))
+        self.source = source
+        self.pos = 0 
+        self.Show()
         
-             label = tkinter.Label(frame_buttons, width = 10, height = 2, \
-                                   text = row, relief = tkinter.RIDGE)
-             if row == "":
-                label.config(bg="gray")
-             label.grid(row = r, column = c,sticky='news')
-             c += 1
-          r += 1
-      
-def browse_file():
-    fname = filedialog.askopenfilename(filetypes = (("All files", "*.type"), ("All files", "*")))
-    print (fname)
-    display_matrix(fname)
+    
 
+class Frame(wx.Frame):
+    def __init__(self, parent):
+        wx.Frame.__init__(self, parent, -1, "Grid", size=(700,450))
+        menubar = wx.MenuBar()
+        fileMenu = wx.Menu()
+        fitem = fileMenu.Append(wx.ID_OPEN, '&Open')
+        menubar.Append(fileMenu, '&File')
+        self.Bind(wx.EVT_MENU, self.browse_file, fitem)
 
-filemenu.add_command(label = "Open", command = browse_file)
+        
+        self.SetMenuBar(menubar)
+        self.grid = grid.Grid(self)
+        self.grid.CreateGrid(currentgrid, currentgrid)
 
-filemenu.add_separator()
+    
+    def browse_file(self,e):
+        with wx.FileDialog(self, "Open CSV file", wildcard="CSV file (*.csv)|*.csv",
+                       style=wx.FD_OPEN | wx.FD_FILE_MUST_EXIST) as fileDialog:
 
-filemenu.add_command(label = "Exit", command = root.quit)
-menubar.add_cascade(label = "File", menu = filemenu)
+            if fileDialog.ShowModal() == wx.ID_CANCEL:
+                return     # the user changed their mind
+            
+            pathname = fileDialog.GetPath()
+            try:
+                with open(pathname,newline="") as file:
+                    row_count = sum(1 for row in file)
+                    print(row_count)
+                    self.grid.AppendRows(row_count-currentgrid)
+                    self.grid.AppendCols(row_count-currentgrid)
+            except IOError:
+                wx.LogError("Cannot open file '%s'." % newfile)
+                
 
+        self.display_data(pathname)
 
+    def display_data(self,pathname):
+        with open(pathname,newline="") as file:
+            reader = csv.reader(file)
+            r = 0
+            for col in reader:
+               c = 0
+               for row in col:
+                  self.grid.SetCellValue(r,c,row)
+                  self.grid.SetCellValue(c,r,row)
+                  if row == "":
+                      self.grid.SetCellBackgroundColour(r,c,"gray")
+                  c += 1
+                  
+               r += 1
+               
+            
 
-#broButton = tkinter.Button(master = root, text = 'Browse', width = 6, command=browse_file)
-#broButton.grid(column=0,row=0)
-
-
-root.config(menu = menubar)
-root.mainloop()
+if __name__ == '__main__':
+    app = wx.App(False)
+    frame = Frame(None)
+    frame.Show()
+    app.MainLoop()
